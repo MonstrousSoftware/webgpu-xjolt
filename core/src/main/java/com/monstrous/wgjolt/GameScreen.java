@@ -188,20 +188,20 @@ public class GameScreen extends ScreenAdapter {
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
             spawnBox(8f);
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.T)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.T)){
             useDebugRender = !useDebugRender;
         }
 
         inputController.update();
         stepPhysics(deltaTime);
 
-        updateVisuals();
-
         WgScreenUtils.clear(Color.TEAL, true);
 
         if(useDebugRender)
             debugRender();
         else {
+            updateVisuals();
+
             modelBatch.begin(cam);
             modelBatch.render(instances, environment);
             modelBatch.end();

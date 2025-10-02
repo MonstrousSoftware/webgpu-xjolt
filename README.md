@@ -1,7 +1,7 @@
 # webgpu-xjolt
 
-Test to use xjolt.
-No snapshot is available to download.
+Test to use gdx-webgpu in combination with XJolt for physics.
+
 
 ## Platforms
 

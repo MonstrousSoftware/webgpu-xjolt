@@ -1,12 +1,19 @@
 package com.monstrous.wgjolt;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.monstrous.gdx.webgpu.graphics.g2d.WgBitmapFont;
+import com.monstrous.gdx.webgpu.graphics.g2d.WgSpriteBatch;
 import com.monstrous.gdx.webgpu.graphics.utils.WgScreenUtils;
 import jolt.JoltLoader;
 
 public class InitScreen extends ScreenAdapter {
     private final Main game;
     private boolean init = false;
+    private WgSpriteBatch batch;
+    private BitmapFont font;
 
     public InitScreen(Main game) {
         this.game = game;
@@ -14,6 +21,9 @@ public class InitScreen extends ScreenAdapter {
 
     @Override
     public void show() {
+        batch = new WgSpriteBatch();
+        font = new WgBitmapFont();
+
         // load Jolt
         JoltLoader.init((joltSuccess, e2) -> init = joltSuccess);
     }
@@ -27,6 +37,15 @@ public class InitScreen extends ScreenAdapter {
         }
 
         System.out.println("JoltLoader.init: "+init);
-        WgScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+
+        batch.begin(Color.TEAL );
+        font.draw(batch, "Loading Jolt library...", 10, 80);
+        batch.end();
+    }
+
+    @Override
+    public void dispose() {
+        batch.dispose();
+        font.dispose();
     }
 }

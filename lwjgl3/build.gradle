@@ -36,6 +36,8 @@ dependencies {
   implementation project(':core')
   implementation "io.github.monstroussoftware.gdx-webgpu:gdx-desktop-webgpu:$gdxWebGPUVersion"
   implementation("com.github.xpenatan.xJolt:jolt-desktop:-SNAPSHOT")
+  implementation("com.github.xpenatan.jWebGPU:webgpu-core:$jWebGPUVVersion")    // can we not import this via gdx-webgpu?
+
 
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-backend-lwjgl3:$graalHelperVersion"

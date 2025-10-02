@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.monstrous.gdx.webgpu.backends.desktop.WgDesktopApplication;
 import com.monstrous.gdx.webgpu.backends.desktop.WgDesktopApplicationConfiguration;
 import com.monstrous.wgjolt.Main;
+import com.github.xpenatan.webgpu.JWebGPUBackend;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {
@@ -17,6 +18,7 @@ public class Lwjgl3Launcher {
         config.setWindowedMode(800, 600);
         config.setTitle("WebGPU + Jolt");
         config.enableGPUtiming = false;
+        config.backendWebGPU = JWebGPUBackend.WGPU;
         config.useVsync(false);
         new WgDesktopApplication(new Main(), config);
     }
