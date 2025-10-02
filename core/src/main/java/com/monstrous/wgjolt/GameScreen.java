@@ -34,6 +34,7 @@ import com.monstrous.wgjolt.jolt.Layers;
 import jolt.JoltNew;
 import jolt.enums.EActivation;
 import jolt.enums.EMotionType;
+import jolt.enums.EShapeColor;
 import jolt.gdx.JoltDebugRenderer;
 import jolt.gdx.wgpu.WGPUDebugRenderer;
 import jolt.math.Quat;
@@ -41,8 +42,6 @@ import jolt.math.Vec3;
 import jolt.physics.PhysicsSystem;
 import jolt.physics.body.*;
 import jolt.physics.collision.shape.BoxShape;
-import jolt.physics.collision.shape.Shape;
-;
 
 public class GameScreen extends ScreenAdapter {
     private final Main game;
@@ -74,6 +73,7 @@ public class GameScreen extends ScreenAdapter {
 
         debugRenderer = new WGPUDebugRenderer();
         debugSettings = new BodyManagerDrawSettings();
+        debugSettings.set_mDrawShapeColor(EShapeColor.EShapeColor_SleepColor );
         useDebugRender = false;
 
         disposables = new Array<>();
@@ -165,9 +165,10 @@ public class GameScreen extends ScreenAdapter {
         inPosition.dispose();
     }
 
+
     private BodyID createBlock(float size, float x, float y, float z) {
-        Vec3 vec3 = JoltNew.Vec3(0.5f*size, 0.5f*size, 0.5f*size);
-        Shape box_shape = new BoxShape(vec3);
+        Vec3 vec3 = JoltNew.Vec3(0.5f * size, 0.5f * size, 0.5f * size);
+        BoxShape box_shape = new BoxShape(vec3);
         vec3.dispose();
 
         Vec3 position = JoltNew.Vec3(x, y, z);
@@ -258,4 +259,5 @@ public class GameScreen extends ScreenAdapter {
         batch.dispose();
         font.dispose();
     }
+
 }

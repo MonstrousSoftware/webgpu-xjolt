@@ -14,6 +14,7 @@ public class InitScreen extends ScreenAdapter {
     private boolean init = false;
     private WgSpriteBatch batch;
     private BitmapFont font;
+    private float duration;
 
     public InitScreen(Main game) {
         this.game = game;
@@ -23,6 +24,7 @@ public class InitScreen extends ScreenAdapter {
     public void show() {
         batch = new WgSpriteBatch();
         font = new WgBitmapFont();
+        duration = 0;
 
         // load Jolt
         JoltLoader.init((joltSuccess, e2) -> init = joltSuccess);
@@ -32,11 +34,12 @@ public class InitScreen extends ScreenAdapter {
     public void render(float delta) {
         // proceed to next screen once Jolt is loaded
         if(init) {
+            System.out.println("JoltLoader.init completed at t = "+duration);
             game.setScreen(new GameScreen(game));
             return;
         }
+        duration += delta;
 
-        System.out.println("JoltLoader.init: "+init);
 
         batch.begin(Color.TEAL );
         font.draw(batch, "Loading Jolt library...", 10, 80);

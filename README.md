@@ -2,6 +2,7 @@
 
 Test to use gdx-webgpu in combination with XJolt for physics.
 
+![screenshot.png](screenshot.png)
 
 ## Platforms
 
