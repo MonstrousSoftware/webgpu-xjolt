@@ -35,13 +35,11 @@ import jolt.JoltNew;
 import jolt.enums.EActivation;
 import jolt.enums.EMotionType;
 import jolt.gdx.JoltDebugRenderer;
+import jolt.gdx.wgpu.WGPUDebugRenderer;
 import jolt.math.Quat;
 import jolt.math.Vec3;
 import jolt.physics.PhysicsSystem;
-import jolt.physics.body.Body;
-import jolt.physics.body.BodyCreationSettings;
-import jolt.physics.body.BodyID;
-import jolt.physics.body.BodyInterface;
+import jolt.physics.body.*;
 import jolt.physics.collision.shape.BoxShape;
 import jolt.physics.collision.shape.Shape;
 ;
@@ -53,7 +51,8 @@ public class GameScreen extends ScreenAdapter {
     protected JoltInstance joltInstance = null;
     protected PhysicsSystem physicsSystem = null;
     protected BodyInterface bodyInterface = null;
-    //protected JoltDebugRenderer mDebugRenderer = null;
+    protected JoltDebugRenderer debugRenderer = null;
+    private BodyManagerDrawSettings debugSettings;
     private WgModelBatch modelBatch;
     private Environment environment;
     private PerspectiveCamera cam;
@@ -61,6 +60,7 @@ public class GameScreen extends ScreenAdapter {
     private Array<ModelInstance> instances;
     private CameraInputController inputController;
     private Model boxModel;
+    private boolean useDebugRender;
 
     public GameScreen(Main game) {
         this.game = game;
@@ -71,6 +71,10 @@ public class GameScreen extends ScreenAdapter {
         joltInstance = new JoltInstance();
         physicsSystem = joltInstance.getPhysicsSystem();
         bodyInterface = physicsSystem.GetBodyInterface();
+
+        debugRenderer = new WGPUDebugRenderer();
+        debugSettings = new BodyManagerDrawSettings();
+        useDebugRender = false;
 
         disposables = new Array<>();
 
@@ -184,6 +188,9 @@ public class GameScreen extends ScreenAdapter {
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
             spawnBox(8f);
         }
+        if(Gdx.input.isKeyPressed(Input.Keys.T)){
+            useDebugRender = !useDebugRender;
+        }
 
         inputController.update();
         stepPhysics(deltaTime);
@@ -192,17 +199,27 @@ public class GameScreen extends ScreenAdapter {
 
         WgScreenUtils.clear(Color.TEAL, true);
 
-        modelBatch.begin(cam);
-        modelBatch.render(instances, environment);
-        modelBatch.end();
+        if(useDebugRender)
+            debugRender();
+        else {
+            modelBatch.begin(cam);
+            modelBatch.render(instances, environment);
+            modelBatch.end();
+        }
 
         batch.begin();
         float dy = 25f;
         float y = 100f;
-        font.draw(batch, "R to reset, SPACE to spawn items", 10, y -= dy);
+        font.draw(batch, "R to reset, SPACE to spawn items, T to toggle debug render", 10, y -= dy);
         font.draw(batch, "Items: "+instances.size, 10, y -= dy);
         font.draw(batch, "FPS: "+Gdx.graphics.getFramesPerSecond(), 10, y -= dy);
         batch.end();
+    }
+
+    private void debugRender() {
+        debugRenderer.begin(cam);
+        debugRenderer.DrawBodies(joltInstance.getPhysicsSystem(), debugSettings);
+        debugRenderer.end();
     }
 
     public void stepPhysics(float deltaTime) {
@@ -236,6 +253,8 @@ public class GameScreen extends ScreenAdapter {
         joltInstance.dispose();
         for(Disposable disposable : disposables)
             disposable.dispose();
+        debugRenderer.dispose();
+        debugSettings.dispose();
         batch.dispose();
         font.dispose();
     }
