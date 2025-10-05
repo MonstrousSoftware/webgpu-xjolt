@@ -79,7 +79,7 @@ public class GameScreen extends ScreenAdapter {
         debugRenderer = new WGPUDebugRenderer();
         debugSettings = new BodyManagerDrawSettings();
         // debugSettings.set_mDrawShapeColor(EShapeColor.EShapeColor_SleepColor );
-        useDebugRender = false;
+        useDebugRender = true;
 
         disposables = new Array<>();
 
@@ -141,6 +141,9 @@ public class GameScreen extends ScreenAdapter {
         createFloorBody(w,h);
 
         spawnBox(w);
+
+        for(int i = 0; i < 592; i++)
+            spawnBox(8f);
     }
 
     private void spawnBox(float spawnWidth){
