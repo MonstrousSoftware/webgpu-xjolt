@@ -43,6 +43,11 @@ import jolt.physics.PhysicsSystem;
 import jolt.physics.body.*;
 import jolt.physics.collision.shape.BoxShape;
 
+
+// when in debug renderer mode, after 592 items we get
+// Exception in thread "main" java.lang.IllegalArgumentException: Comparison method violates its general contract!
+// due to material comparison in WgDefaultRenderableSorter
+
 public class GameScreen extends ScreenAdapter {
     private final Main game;
     private WgSpriteBatch batch;
@@ -73,12 +78,12 @@ public class GameScreen extends ScreenAdapter {
 
         debugRenderer = new WGPUDebugRenderer();
         debugSettings = new BodyManagerDrawSettings();
-        debugSettings.set_mDrawShapeColor(EShapeColor.EShapeColor_SleepColor );
+        // debugSettings.set_mDrawShapeColor(EShapeColor.EShapeColor_SleepColor );
         useDebugRender = false;
 
         disposables = new Array<>();
 
-        WgDefaultShader.Config config = new WgDefaultShader.Config();
+        WgModelBatch.Config config = new WgModelBatch.Config();
         config.maxInstances = 10000;        // allow lots of items
         modelBatch = new WgModelBatch(config);
         disposables.add( modelBatch );
@@ -197,10 +202,10 @@ public class GameScreen extends ScreenAdapter {
         stepPhysics(deltaTime);
 
         WgScreenUtils.clear(Color.TEAL, true);
+        if(useDebugRender) {
 
-        if(useDebugRender)
             debugRender();
-        else {
+        } else {
             updateVisuals();
 
             modelBatch.begin(cam);
@@ -210,9 +215,10 @@ public class GameScreen extends ScreenAdapter {
 
         batch.begin();
         float dy = 25f;
-        float y = 100f;
+        float y = 180f;
         font.draw(batch, "R to reset, SPACE to spawn items, T to toggle debug render", 10, y -= dy);
         font.draw(batch, "Items: "+instances.size, 10, y -= dy);
+        font.draw(batch, "Materials: "+modelBatch.materials.count() , 10, y -= dy);
         font.draw(batch, "FPS: "+Gdx.graphics.getFramesPerSecond(), 10, y -= dy);
         batch.end();
     }
@@ -247,6 +253,7 @@ public class GameScreen extends ScreenAdapter {
             boxInstance.transform.set(position, quaternion);
         }
     }
+
 
     @Override
     public void dispose() {
