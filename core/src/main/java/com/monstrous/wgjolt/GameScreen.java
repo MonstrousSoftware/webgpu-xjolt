@@ -31,12 +31,13 @@ import com.monstrous.gdx.webgpu.graphics.g3d.utils.WgModelBuilder;
 import com.monstrous.gdx.webgpu.graphics.utils.WgScreenUtils;
 import com.monstrous.wgjolt.jolt.JoltInstance;
 import com.monstrous.wgjolt.jolt.Layers;
+import com.monstrous.wgjolt.jolt.WGPUDebugRenderer;
 import jolt.JoltNew;
 import jolt.enums.EActivation;
 import jolt.enums.EMotionType;
 import jolt.enums.EShapeColor;
 import jolt.gdx.JoltDebugRenderer;
-import jolt.gdx.wgpu.WGPUDebugRenderer;
+
 import jolt.math.Quat;
 import jolt.math.Vec3;
 import jolt.physics.PhysicsSystem;
@@ -79,7 +80,7 @@ public class GameScreen extends ScreenAdapter {
         debugRenderer = new WGPUDebugRenderer();
         debugSettings = new BodyManagerDrawSettings();
         // debugSettings.set_mDrawShapeColor(EShapeColor.EShapeColor_SleepColor );
-        useDebugRender = true;
+        useDebugRender = false;
 
         disposables = new Array<>();
 
@@ -141,9 +142,6 @@ public class GameScreen extends ScreenAdapter {
         createFloorBody(w,h);
 
         spawnBox(w);
-
-        for(int i = 0; i < 592; i++)
-            spawnBox(8f);
     }
 
     private void spawnBox(float spawnWidth){

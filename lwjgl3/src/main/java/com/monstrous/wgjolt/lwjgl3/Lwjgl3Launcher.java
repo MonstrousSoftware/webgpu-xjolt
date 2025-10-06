@@ -1,6 +1,6 @@
 package com.monstrous.wgjolt.lwjgl3;
 
-import com.monstrous.gdx.webgpu.application.WebGPUContext;
+
 import com.monstrous.gdx.webgpu.backends.desktop.WgDesktopApplication;
 import com.monstrous.gdx.webgpu.backends.desktop.WgDesktopApplicationConfiguration;
 import com.monstrous.wgjolt.Main;
@@ -12,7 +12,7 @@ public class Lwjgl3Launcher {
 
         WgDesktopApplicationConfiguration config = new WgDesktopApplicationConfiguration();
         config.backendWebGPU = JWebGPUBackend.WGPU; // WGPU or DAWN
-        config.backend = WebGPUContext.Backend.DEFAULT; // Vulkan, DX12, etc.
+        //config.backend = WebGPUContext.Backend.DEFAULT; // Vulkan, DX12, etc.
         config.setWindowedMode(800, 600);
         config.setTitle("WebGPU + Jolt");
         config.enableGPUtiming = false;
