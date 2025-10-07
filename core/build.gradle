@@ -3,16 +3,13 @@ eclipse.project.name = appName + '-core'
 
 dependencies {
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
-  implementation "io.github.monstroussoftware.gdx-webgpu:gdx-webgpu:-SNAPSHOT"
-//  implementation("com.github.xpenatan.xJolt:jolt-core:-SNAPSHOT")
-//  implementation("com.github.xpenatan.xJolt:jolt-gdx:-SNAPSHOT")
+  implementation "io.github.monstroussoftware.gdx-webgpu:gdx-webgpu:$gdxWebGPUVersion"
 
   // Core module
-  implementation("com.github.xpenatan.xJolt:jolt-core:-SNAPSHOT")
-  implementation("com.github.xpenatan.xJolt:gdx-utils:-SNAPSHOT")  // Gdx Shared utils
-//  implementation("com.github.xpenatan.xJolt:gdx-gl:-SNAPSHOT")     // OpenGL
- // implementation("com.github.xpenatan.xJolt:gdx-wgpu:-SNAPSHOT")   // WebGPU
-
+  implementation("com.github.xpenatan.xJolt:jolt-core:$xJoltVersion")
+  implementation("com.github.xpenatan.xJolt:gdx-utils:$xJoltVersion")  // Gdx Shared utils (JoltDebugRenderer)
+  // don't import xJolt:gdx-wgpu because it may be fixed to another version of gdx-webgpu
+  // instead: WGPUDebugRenderer is coded locally
 
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"

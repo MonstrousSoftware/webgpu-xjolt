@@ -26,7 +26,6 @@ import com.monstrous.gdx.webgpu.graphics.WgTexture;
 import com.monstrous.gdx.webgpu.graphics.g2d.WgBitmapFont;
 import com.monstrous.gdx.webgpu.graphics.g2d.WgSpriteBatch;
 import com.monstrous.gdx.webgpu.graphics.g3d.WgModelBatch;
-import com.monstrous.gdx.webgpu.graphics.g3d.shaders.WgDefaultShader;
 import com.monstrous.gdx.webgpu.graphics.g3d.utils.WgModelBuilder;
 import com.monstrous.gdx.webgpu.graphics.utils.WgScreenUtils;
 import com.monstrous.wgjolt.jolt.JoltInstance;
@@ -35,9 +34,9 @@ import com.monstrous.wgjolt.jolt.WGPUDebugRenderer;
 import jolt.JoltNew;
 import jolt.enums.EActivation;
 import jolt.enums.EMotionType;
-import jolt.enums.EShapeColor;
-import jolt.gdx.JoltDebugRenderer;
 
+
+import jolt.gdx.JoltDebugRenderer;
 import jolt.math.Quat;
 import jolt.math.Vec3;
 import jolt.physics.PhysicsSystem;

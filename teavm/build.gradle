@@ -28,8 +28,6 @@ dependencies {
   implementation "org.teavm:teavm-tooling:$teaVMVersion"
   implementation project(':core')
   implementation "io.github.monstroussoftware.gdx-webgpu:gdx-teavm-webgpu:$gdxWebGPUVersion"
-
-
 }
 
 tasks.register("buildJavaScript", JavaExec) {

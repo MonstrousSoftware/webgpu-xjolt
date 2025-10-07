@@ -13,6 +13,7 @@ import com.monstrous.gdx.webgpu.graphics.g3d.WgModelBatch;
 import com.monstrous.gdx.webgpu.graphics.g3d.model.WgMeshPart;
 import jolt.gdx.JoltDebugRenderer;
 
+
 public class WGPUDebugRenderer extends JoltDebugRenderer {
 
     WgModelBatch batch;
@@ -63,8 +64,6 @@ public class WGPUDebugRenderer extends JoltDebugRenderer {
     @Override
     protected void batchEnd() {
         batch.end();
-        //System.out.println("draw calls: " + batch.drawCalls+ " shader switches:" + batch.shaderSwitches+" num materials: "+batch.numMaterials);
-
     }
 
     @Override
