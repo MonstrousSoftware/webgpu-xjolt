@@ -22,9 +22,10 @@ public class WGPUDebugRenderer extends JoltDebugRenderer {
         WgModelBatch.Config config = new WgModelBatch.Config();
         config.maxDirectionalLights = 1;
         config.maxPointLights = 0;
-        config.numBones = 2;
-        config.maxRigged = 2;
+        config.numBones = 0;
+        config.maxRigged = 0;
         config.usePBR = false;
+        config.maxInstances = 4096;
 
         System.out.println("Webgpu debug renderer");
         batch = new WgModelBatch(config);
