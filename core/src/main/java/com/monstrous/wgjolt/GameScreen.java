@@ -43,12 +43,9 @@ import jolt.physics.PhysicsSystem;
 import jolt.physics.body.*;
 import jolt.physics.collision.shape.BoxShape;
 
-
-// when in debug renderer mode, after 592 items we get
-// Exception in thread "main" java.lang.IllegalArgumentException: Comparison method violates its general contract!
-// due to material comparison in WgDefaultRenderableSorter
-
 public class GameScreen extends ScreenAdapter {
+    public final int MAX_INSTANCES = 10000;
+
     private final Main game;
     private WgSpriteBatch batch;
     private BitmapFont font;
@@ -76,7 +73,7 @@ public class GameScreen extends ScreenAdapter {
         physicsSystem = joltInstance.getPhysicsSystem();
         bodyInterface = physicsSystem.GetBodyInterface();
 
-        debugRenderer = new WGPUDebugRenderer();
+        debugRenderer = new WGPUDebugRenderer(MAX_INSTANCES);
         debugSettings = new BodyManagerDrawSettings();
         // debugSettings.set_mDrawShapeColor(EShapeColor.EShapeColor_SleepColor );
         useDebugRender = false;
@@ -84,7 +81,7 @@ public class GameScreen extends ScreenAdapter {
         disposables = new Array<>();
 
         WgModelBatch.Config config = new WgModelBatch.Config();
-        config.maxInstances = 10000;        // allow lots of items
+        config.maxInstances = MAX_INSTANCES;        // allow lots of items
         modelBatch = new WgModelBatch(config);
         disposables.add( modelBatch );
 
@@ -110,6 +107,7 @@ public class GameScreen extends ScreenAdapter {
         font = new WgBitmapFont();
     }
 
+    /** Create a Model of a textured box from which to derive ModelInstances */
     private Model createBoxModel(){
         Texture texture = new WgTexture(Gdx.files.internal("badlogic.jpg"), true);
         texture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
@@ -129,6 +127,7 @@ public class GameScreen extends ScreenAdapter {
         populate();
     }
 
+    /** Create a floor and a single box */
     private void populate(){
         ModelBuilder modelBuilder = new WgModelBuilder();
         float w = 15f;
@@ -138,12 +137,16 @@ public class GameScreen extends ScreenAdapter {
         ModelInstance instance = new ModelInstance(floorModel, 0, -h/2, 0);
         instances.add(instance);
         disposables.add(floorModel);
-        createFloorBody(w,h);
+        BodyID floorBody = createFloorBody(w,h);
+        instance.userData = floorBody;
 
         spawnBox(w);
     }
 
+    /** create a ModelInstance and a corresponding Physics Body */
     private void spawnBox(float spawnWidth){
+        if(instances.size >= MAX_INSTANCES) // prevent overflow
+            return;
 
         float sz = 1;
         float ht = 9f;
@@ -152,11 +155,11 @@ public class GameScreen extends ScreenAdapter {
 
         ModelInstance boxInstance = new ModelInstance(boxModel, x, ht, z);
         instances.add(boxInstance);
-        BodyID boxID = createBlock(sz, x, ht, z);
+        BodyID boxID = createBlockBody(sz, x, ht, z);
         boxInstance.userData = boxID;   // link model instance to Jolt body via userData
     }
 
-    protected void createFloorBody(float w, float h) {
+    protected BodyID createFloorBody(float w, float h) {
         float scale = 1f;
         Vec3 inHalfExtent = JoltNew.Vec3(scale * (0.5f * w), scale * (0.5f*h), scale * (0.5f * w));
         Vec3 inPosition = JoltNew.Vec3(0.0f, scale * -0.5f*h, 0.0f);
@@ -168,10 +171,11 @@ public class GameScreen extends ScreenAdapter {
         bodySettings.dispose();
         inHalfExtent.dispose();
         inPosition.dispose();
+        return body.GetID();
     }
 
 
-    private BodyID createBlock(float size, float x, float y, float z) {
+    private BodyID createBlockBody(float size, float x, float y, float z) {
         Vec3 vec3 = JoltNew.Vec3(0.5f * size, 0.5f * size, 0.5f * size);
         BoxShape box_shape = new BoxShape(vec3);
         vec3.dispose();

@@ -1,12 +1,11 @@
 package com.monstrous.wgjolt.teavm;
 
 import com.github.xpenatan.gdx.backends.teavm.config.AssetFileHandle;
-import com.github.xpenatan.gdx.backends.teavm.config.TeaBuildConfiguration;
-import com.github.xpenatan.gdx.backends.teavm.config.TeaBuilder;
-import com.github.xpenatan.gdx.backends.teavm.config.plugins.TeaReflectionSupplier;
 import java.io.File;
 import java.io.IOException;
-import org.teavm.tooling.TeaVMTargetType;
+
+import com.github.xpenatan.gdx.backends.teavm.config.TeaBuildConfiguration;
+import com.github.xpenatan.gdx.backends.teavm.config.TeaBuilder;
 import org.teavm.tooling.TeaVMTool;
 import org.teavm.vm.TeaVMOptimizationLevel;
 
@@ -24,6 +23,7 @@ public class TeaVMBuilder {
         // TeaReflectionSupplier.addReflectionClass("com.monstrous.wgjolt.reflect");
 
         TeaVMTool tool = TeaBuilder.config(teaBuildConfiguration);
+        //TeaVMTool tool = new TeaVMTool();
         // You can uncomment the line below to use WASM instead of JavaScript as a target.
         // Some code can see very significant performance benefits from WASM, and some won't.
 //        tool.setTargetType(TeaVMTargetType.WEBASSEMBLY_GC);

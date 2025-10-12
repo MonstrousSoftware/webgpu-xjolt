@@ -27,6 +27,7 @@ dependencies {
   implementation "org.teavm:teavm-jso:$teaVMVersion"
   implementation "org.teavm:teavm-tooling:$teaVMVersion"
   implementation project(':core')
+  implementation("com.github.xpenatan.xJolt:jolt-teavm:$xJoltVersion")
   implementation "io.github.monstroussoftware.gdx-webgpu:gdx-teavm-webgpu:$gdxWebGPUVersion"
 }
 
