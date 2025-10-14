@@ -65,6 +65,7 @@ public class WGPUDebugRenderer extends JoltDebugRenderer {
     @Override
     protected void batchEnd() {
         batch.end();
+        //System.out.println("draw calls: " + batch.drawCalls+" mats: "+batch.getMaterialCount()+ " shaders:"+batch.shaderSwitches);
     }
 
     @Override

@@ -62,6 +62,7 @@ public class GameScreen extends ScreenAdapter {
     private CameraInputController inputController;
     private Model boxModel;
     private boolean useDebugRender;
+    private BoxShape boxShape;
 
     public GameScreen(Main game) {
         this.game = game;
@@ -96,7 +97,8 @@ public class GameScreen extends ScreenAdapter {
         cam.far = 150f;
         cam.update();
 
-        boxModel = createBoxModel();
+        boxModel = createBoxModel(1f);
+        boxShape = createBoxShape(1f);
 
         instances = new Array<>();
         populate();
@@ -108,14 +110,13 @@ public class GameScreen extends ScreenAdapter {
     }
 
     /** Create a Model of a textured box from which to derive ModelInstances */
-    private Model createBoxModel(){
+    private Model createBoxModel(float size){
         Texture texture = new WgTexture(Gdx.files.internal("badlogic.jpg"), true);
         texture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
         disposables.add( texture );
         Material mat = new Material(TextureAttribute.createDiffuse(texture));
         ModelBuilder modelBuilder = new WgModelBuilder();
-        float sz = 1;
-        Model boxModel = modelBuilder.createBox(sz, sz, sz, mat,
+        Model boxModel = modelBuilder.createBox(size, size, size, mat,
             VertexAttributes.Usage.Position | VertexAttributes.Usage.TextureCoordinates | VertexAttributes.Usage.Normal);
         disposables.add( boxModel );
         return boxModel;
@@ -141,6 +142,8 @@ public class GameScreen extends ScreenAdapter {
         instance.userData = floorBody;
 
         spawnBox(w);
+//        for(int i = 0; i < 1000; i++)
+//            spawnBox(w);
     }
 
     /** create a ModelInstance and a corresponding Physics Body */
@@ -148,14 +151,13 @@ public class GameScreen extends ScreenAdapter {
         if(instances.size >= MAX_INSTANCES) // prevent overflow
             return;
 
-        float sz = 1;
-        float ht = 9f;
+        float ht = 9f;  // drop height
         float x = spawnWidth * ((float)Math.random()- 0.5f);
         float z = spawnWidth * ((float)Math.random()- 0.5f);
 
         ModelInstance boxInstance = new ModelInstance(boxModel, x, ht, z);
         instances.add(boxInstance);
-        BodyID boxID = createBlockBody(sz, x, ht, z);
+        BodyID boxID = createBlockBody(x, ht, z);
         boxInstance.userData = boxID;   // link model instance to Jolt body via userData
     }
 
@@ -174,14 +176,16 @@ public class GameScreen extends ScreenAdapter {
         return body.GetID();
     }
 
-
-    private BodyID createBlockBody(float size, float x, float y, float z) {
+    private BoxShape createBoxShape(float size){
         Vec3 vec3 = JoltNew.Vec3(0.5f * size, 0.5f * size, 0.5f * size);
-        BoxShape box_shape = new BoxShape(vec3);
+        BoxShape shape = new BoxShape(vec3);
         vec3.dispose();
+        return shape;
+    }
 
+    private BodyID createBlockBody(float x, float y, float z) {
         Vec3 position = JoltNew.Vec3(x, y, z);
-        BodyCreationSettings bodyCreationSettings = JoltNew.BodyCreationSettings(box_shape, position, Quat.sIdentity(), EMotionType.Dynamic, Layers.MOVING);
+        BodyCreationSettings bodyCreationSettings = JoltNew.BodyCreationSettings(boxShape, position, Quat.sIdentity(), EMotionType.Dynamic, Layers.MOVING);
         Body body = bodyInterface.CreateBody(bodyCreationSettings);
         bodyInterface.SetRestitution(body.GetID(),0.5f);  // bouncy!
         bodyInterface.AddBody(body.GetID(), EActivation.Activate);
